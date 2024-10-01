@@ -1,0 +1,41 @@
+Firewall Configuration on CentOS to Block SSH Access
+Check Firewall Status:
+
+Command: sudo systemctl status firewalld
+This command checks if the firewall service (firewalld) is active. If it is inactive, proceed to the next step to start it.
+Start the Firewall:
+
+Command: sudo systemctl start firewalld
+This activates the firewall service if it is not already running.
+Block SSH Access:
+
+Command: sudo firewall-cmd --zone=public --remove-service=ssh --permanent
+This removes SSH access from the "public" zone of the firewall, blocking SSH connections.
+After this, run sudo firewall-cmd --reload to apply the changes.
+Test SSH Block:
+
+Use software like PuTTY to attempt an SSH connection. If the SSH service is blocked, the connection will fail, confirming that the firewall is properly configured to block SSH.
+Unblock SSH Access:
+
+Command: sudo firewall-cmd --zone=public --add-service=ssh --permanent
+This re-enables SSH access by adding it back to the firewall's "public" zone.
+Blocking a Specific IP Address
+Verify Network Configuration:
+
+Ensure that the network is correctly configured by testing ping requests between a Windows host and Ubuntu VM.
+Add a Rule to Block IP:
+
+Command: sudo firewall-cmd --zone=public --add-rich-rule='rule family="ipv4" source address="192.168.1.11" drop' --permanent
+This command adds a rule to block traffic from the specified IP address (192.168.1.11).
+Refresh the Firewall:
+
+Command: sudo firewall-cmd --reload
+This reloads the firewall configuration to apply the new rule.
+Verify IP Blocking:
+
+Use the ping command from a Windows machine. If the ping request times out, it confirms that the IP is successfully blocked.
+Unblock the IP Address:
+
+Command: sudo firewall-cmd --zone=public --remove-rich-rule='rule family="ipv4" source address="192.168.1.11" drop' --permanent
+After this, reload the firewall with sudo firewall-cmd --reload to apply the changes and unblock the IP.
+This process effectively configures firewall rules for blocking or unblocking SSH access and specific IP addresses.
